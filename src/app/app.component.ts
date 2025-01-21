@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component} from '@angular/core';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [Button],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+  standalone: true
 })
 export class AppComponent {
-  title = 'balarcade_fe';
+  openAlert() {
+    window.alert("Bella")
+  }
+
 }
