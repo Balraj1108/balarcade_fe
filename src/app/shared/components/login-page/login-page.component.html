@@ -1,1 +1,51 @@
-<p>login-page works!</p>
+<div class="login-container">
+  <p-card pStyleClass="p-shadow-6">
+    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label class="p-label">Email</label>
+          <input
+            type="email"
+            pInputText
+            formControlName="email"
+            autocomplete="off"
+          />
+        </div>
+        <div class="p-error">
+          <small
+            style="margin-bottom: 20px"
+            *ngIf="submitted && loginForm.controls['email'].invalid"
+          >
+            Email non valida
+          </small>
+        </div>
+
+        <div class="p-field">
+          <label class="p-label">Password</label>
+          <input
+            type="password"
+            pInputText
+            formControlName="password"
+            autocomplete="off"
+          />
+        </div>
+        <div class="p-error">
+          <small
+            *ngIf="submitted && loginForm.controls['password'].invalid"
+          >
+            La password è obbligatoria
+          </small>
+        </div>
+
+        <div class="p-field">
+          <button
+            pButton
+            type="submit"
+            label="Login"
+            [disabled]="loginForm.invalid && submitted"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>
