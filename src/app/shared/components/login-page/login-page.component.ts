@@ -5,6 +5,9 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {InputText} from 'primeng/inputtext';
 import {StyleClass} from 'primeng/styleclass';
 import {Card} from 'primeng/card';
+import {LoginDto} from '../../../auth/dto/login.dto';
+import {AuthService} from '../../../auth/service/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -19,7 +22,10 @@ export class LoginPageComponent implements OnInit {
   loginForm!: FormGroup;
   submitted = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,
+              private authService: AuthService,
+              private router: Router) {
+  }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -31,8 +37,19 @@ export class LoginPageComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      console.log('Login con:', email, password);
+      const {email, password} = this.loginForm.value;
+      const loginDto: LoginDto = {
+        username: email,
+        password: password,
+      };
+      this.authService.loginService(loginDto).subscribe({
+        next: (loginResult) => {
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
     }
   }
 }

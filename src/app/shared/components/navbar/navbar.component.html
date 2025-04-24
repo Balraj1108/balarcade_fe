@@ -6,8 +6,10 @@
   </ng-template>
   <ng-template pTemplate="end">
     <div class="menu-end">
-      <button style="margin-right: 5px" pButton label="Login" [routerLink]="'/login'" class=""></button>
-      <button pButton label="Registrati" class=""></button>
+      <button *ngIf="!isLoggedIn" style="margin-right: 5px" pButton label="Login" [routerLink]="'/login'" class=""></button>
+      <button *ngIf="!isLoggedIn" pButton label="Registrati" [routerLink]="'/registrazione'" class=""></button>
+      <button *ngIf="isLoggedIn" style="margin-left: 5px" pButton label="Profilo" [routerLink]="'/profilo'" class=""></button>
+      <button *ngIf="isLoggedIn" style="margin-left: 5px" pButton label="Logout" (click)="onLogout()"></button>
     </div>
   </ng-template>
 </p-menubar>
