@@ -8,6 +8,8 @@ import {Card} from 'primeng/card';
 import {LoginDto} from '../../../auth/dto/login.dto';
 import {AuthService} from '../../../auth/service/auth.service';
 import {Router} from '@angular/router';
+import {GenericDialogComponent} from '../../dialog/generic-dialog/generic-dialog.component';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-login-page',
@@ -21,16 +23,19 @@ import {Router} from '@angular/router';
 export class LoginPageComponent implements OnInit {
   loginForm!: FormGroup;
   submitted = false;
+  private ref: DynamicDialogRef | undefined;
+
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -47,9 +52,23 @@ export class LoginPageComponent implements OnInit {
           this.router.navigate(['/home']);
         },
         error: (error) => {
+          this.showSuccessDialog("error", "Errore", "Credenziali non valide", "Riprova");
           console.log(error);
         }
       });
     }
+  }
+
+  showSuccessDialog(type: string, header: string, title: string, message: string) {
+    this.ref = this.dialogService.open(GenericDialogComponent, {
+      header: header,
+      width: '400px',
+      data: {
+        type: type,
+        title: title,
+        message: message,
+      },
+      dismissableMask: true,
+    });
   }
 }

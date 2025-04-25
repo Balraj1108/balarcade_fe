@@ -1,1 +1,82 @@
-<p>registrazione works!</p>
+<div class="registration-container">
+  <p-card class="p-shadow-6">
+    <h2 style="text-align: center; margin-bottom: 1.5rem;">Registrazione</h2>
+    <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+      <div class="p-fluid">
+        <!-- Email -->
+        <div class="p-field">
+          <label class="p-label">Email*</label>
+          <input
+            type="email"
+            pInputText
+            formControlName="email"
+            autocomplete="off"
+          />
+        </div>
+        <div class="p-error">
+          <small *ngIf="submitted && registrationForm.controls['email'].invalid">
+            Email non valida
+          </small>
+        </div>
+
+        <!-- Password -->
+        <div class="p-field">
+          <label class="p-label">Password*</label>
+          <input
+            type="password"
+            pInputText
+            formControlName="password"
+            autocomplete="off"
+          />
+        </div>
+        <div class="p-error">
+          <small *ngIf="submitted && registrationForm.controls['password'].invalid">
+            La password è obbligatoria (min. 6 caratteri)
+          </small>
+        </div>
+
+        <!-- Nome -->
+        <div class="p-field">
+          <label class="p-label">Nome*</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="nome"
+            autocomplete="off"
+          />
+        </div>
+        <div class="p-error">
+          <small *ngIf="submitted && registrationForm.controls['nome'].invalid">
+            Il nome è obbligatorio
+          </small>
+        </div>
+
+        <!-- Cognome -->
+        <div class="p-field">
+          <label class="p-label">Cognome*</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="cognome"
+            autocomplete="off"
+          />
+        </div>
+        <div class="p-error">
+          <small *ngIf="submitted && registrationForm.controls['cognome'].invalid">
+            Il cognome è obbligatorio
+          </small>
+        </div>
+
+        <div class="p-field" style="margin-top: 1.5rem;">
+          <button
+            pButton
+            type="submit"
+            label="Registrati"
+            class="p-button-primary"
+            [disabled]="registrationForm.invalid && submitted"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>

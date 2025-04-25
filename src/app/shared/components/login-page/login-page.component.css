@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  margin-top: 200px;
 }
 
 .p-card {
@@ -23,6 +23,5 @@
 .p-error {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  /*font-size: 0.875rem;*/
   color: #ff0000;
 }

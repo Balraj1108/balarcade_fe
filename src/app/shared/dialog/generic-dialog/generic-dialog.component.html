@@ -1,0 +1,9 @@
+<div class="flex flex-column align-items-center gap-3 p-3"
+     [ngClass]="{'text-green-500': config.data.type === 'success', 'text-red-500': config.data.type === 'error'}">
+  <h2 class="m-0">{{ config.data.title }}</h2>
+  <p class="text-center">{{ config.data.message }}</p>
+  <p-button
+    [label]="config.data.buttonLabel || 'OK'"
+    (click)="closeDialog()">
+  </p-button>
+</div>
