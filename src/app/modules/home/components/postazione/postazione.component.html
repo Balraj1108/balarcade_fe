@@ -1,9 +1,8 @@
 <div class="card">
-  <p-progressBar *ngIf="loading" mode="indeterminate"></p-progressBar>
-
   <p-card header="Elenco Postazioni Disponibili">
     <p-listbox
       [options]="postazioni"
+      [scrollHeight]="'flex'"
       optionLabel="nome"
       [style]="{'width':'100%'}"
       (onClick)="selezionaPostazione($event.option)">

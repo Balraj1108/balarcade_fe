@@ -29,10 +29,12 @@ export class AuthService {
 
   localSaveSession(token: any): void {
     localStorage.setItem('accessToken', token['jwt-token']);
+    localStorage.setItem('utente', JSON.stringify(token['utente']));
   }
 
   logout(): void {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('utente');
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }

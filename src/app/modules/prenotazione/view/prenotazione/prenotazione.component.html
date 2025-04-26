@@ -1,0 +1,58 @@
+<div class="p-fluid p-grid p-justify-center">
+  <div class="p-col-12 p-md-8">
+    <p-card header="Prenota {{ postazione?.nome }}">
+      <form (ngSubmit)="confermaPrenotazione()">
+        <div class="p-field">
+          <label>Data</label>
+          <p-datePicker
+            [(ngModel)]="nuovaPrenotazione.dataInizio"
+            name="data"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            [disabledDays]="[0,6]"
+            (onSelect)="updateDates()"
+            required>
+          </p-datePicker>
+        </div>
+
+        <div class="p-field">
+          <label>Ora Inizio</label>
+          <p-select
+            [(ngModel)]="selectedStartHour"
+            [options]="timeOptions"
+            (onChange)="updateDates()"
+            name="oraInizio"
+            required>
+          </p-select>
+        </div>
+
+        <div class="p-field">
+          <label>Ora Fine</label>
+          <p-select
+            [(ngModel)]="selectedEndHour"
+            [options]="timeOptions"
+            (onChange)="updateDates()"
+            name="oraFine"
+            required>
+          </p-select>
+        </div>
+
+        <div class="p-field">
+          <label>Costo Totale</label>
+          <p-inputNumber
+            [(ngModel)]="nuovaPrenotazione.costoTotale"
+            name="costoTotale"
+            [disabled]="true"
+            mode="currency"
+            currency="EUR">
+          </p-inputNumber>
+        </div>
+        <div *ngIf="errorMessage" class="p-error-message" style="color: red; margin-bottom: 1rem;">
+          {{ errorMessage }}
+        </div>
+
+        <button pButton type="submit" label="Prenota" class="p-button-success"></button>
+      </form>
+    </p-card>
+  </div>
+</div>
