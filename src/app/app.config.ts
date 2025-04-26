@@ -7,12 +7,14 @@ import { routes } from './app.routes';
 import {HTTP_INTERCEPTORS, provideHttpClient} from '@angular/common/http';
 import {AuthInterceptor} from './auth/service/auth.interceptor';
 import {DialogService} from 'primeng/dynamicdialog';
+import {MessageService} from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     DialogService,
+    MessageService,
     provideHttpClient(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideAnimationsAsync(),

@@ -1,1 +1,22 @@
-<p>postazione works!</p>
+<div class="card">
+  <p-progressBar *ngIf="loading" mode="indeterminate"></p-progressBar>
+
+  <p-card header="Elenco Postazioni Disponibili">
+    <p-listbox
+      [options]="postazioni"
+      optionLabel="nome"
+      [style]="{'width':'100%'}"
+      (onClick)="selezionaPostazione($event.option)">
+      <ng-template let-postazione pTemplate="item">
+        <div class="flex align-items-center">
+          <i [class]="postazione.disponibile ? 'pi pi-check-circle text-green-500 mr-2' : 'pi pi-times-circle text-red-500 mr-2'"></i>
+          <div>
+            <div class="font-bold">{{postazione.nome}} - {{postazione.tipo}}</div>
+            <div class="text-sm">{{postazione.descrizione}}</div>
+            <div class="text-sm">Costo orario: {{postazione.costoOra | currency:'EUR'}}</div>
+          </div>
+        </div>
+      </ng-template>
+    </p-listbox>
+  </p-card>
+</div>
