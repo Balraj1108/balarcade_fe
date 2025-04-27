@@ -1,7 +1,7 @@
 <div class="p-fluid p-grid p-justify-center">
   <div class="p-col-12 p-md-8">
-    <p-card header="Prenota {{ postazione?.nome }}">
-      <form (ngSubmit)="confermaPrenotazione()">
+    <p-card [header]="isModifica ? 'Modifica Prenotazione ' + (postazione?.nome || '') : 'Prenota ' + (postazione?.nome || '')">
+    <form (ngSubmit)="confermaPrenotazione()">
         <div class="p-field">
           <label>Data</label>
           <p-datePicker
@@ -51,8 +51,14 @@
           {{ errorMessage }}
         </div>
 
-        <button pButton type="submit" label="Prenota" class="p-button-success"></button>
-      </form>
+      <button
+        pButton
+        type="submit"
+        [label]="isModifica ? 'Modifica Prenotazione' : 'Prenota'"
+        class="p-button-success">
+      </button>
+
+    </form>
     </p-card>
   </div>
 </div>

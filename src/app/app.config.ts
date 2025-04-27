@@ -8,6 +8,7 @@ import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@ang
 import {AuthInterceptor} from './auth/service/auth.interceptor';
 import {DialogService} from 'primeng/dynamicdialog';
 import {MessageService} from 'primeng/api';
+import {DatePipe} from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     DialogService,
     MessageService,
+    DatePipe,
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideAnimationsAsync(),

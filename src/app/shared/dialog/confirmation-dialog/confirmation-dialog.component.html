@@ -1,0 +1,24 @@
+<div class="flex flex-column align-items-center gap-3 p-3"
+     [ngClass]="{
+       'text-green-500': config.data.type === 'success',
+       'text-red-500': config.data.type === 'error'
+     }">
+  <h2 class="m-0">{{ config.data.title }}</h2>
+  <p class="text-center m-0">{{ config.data.message }}</p>
+
+  <div class="flex gap-2 mt-3">
+    <button pButton
+            *ngIf="config.data.showCancel"
+            label="Annulla"
+            class="p-button-text"
+            (click)="cancel()"></button>
+
+    <button pButton
+            [label]="config.data.buttonLabel || 'OK'"
+            [ngClass]="{
+              'p-button-success': config.data.type === 'success',
+              'p-button-danger': config.data.type === 'error' || config.data.type === 'confirm'
+            }"
+            (click)="config.data.showCancel ? confirm() : cancel()"></button>
+  </div>
+</div>

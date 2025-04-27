@@ -16,6 +16,8 @@ import {NgIf} from '@angular/common';
 import {PostazioneService} from '../../../home/service/postazione.service';
 import {GenericDialogComponent} from '../../../../shared/dialog/generic-dialog/generic-dialog.component';
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {PrenotazioneConfermataDto} from '../../dto/prenotazione-confermata.dto';
+import {UtenteDto} from '../../../../auth/dto/utente.dto';
 
 @Component({
   selector: 'app-prenotazione',
@@ -37,9 +39,14 @@ import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 })
 export class PrenotazioneComponent implements OnInit {
   postazione!: PostazioneDto | null;
-  prenotazioniEsistenti: PrenotazioneDto[] = [];
+  postazioni: PostazioneDto[] = [];
   errorMessage: string | null = null;
   private ref: DynamicDialogRef | undefined;
+  userInfo: UtenteDto | undefined;
+
+  isModifica = false;
+  prenotazioneId?: number;
+
   nuovaPrenotazione: PrenotazioneDto = {
     dataInizio: new Date(),
     dataFine: new Date(),
@@ -58,41 +65,71 @@ export class PrenotazioneComponent implements OnInit {
     private router: Router,
     private prenotazioneService: PrenotazioneService,
     private postazioneService: PostazioneService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
   ) {
     this.generateTimeOptions();
   }
 
   ngOnInit(): void {
-    const state = history.state as { id: number };
-    if (state?.id) {
-      this.caricaPostazioneById(state.id);
-    } else {
-      this.caricaPrimaPostazione();
-    }
+    this.loadUserInfo();
+    const state = history.state as { id: number, prenotazioneDaModificare: PrenotazioneConfermataDto };
+    this.caricaTuttePostazioni(state);
     this.setDateValidation();
   }
 
-  private caricaPostazioneById(id: number): void {
-    this.postazioneService.getPostazioni().subscribe({
-      next: (data: PostazioneDto[]) => {
-        this.postazione = data.find(p => p.id === id) || null;
-      },
-      error: (error: any) => {
-        console.error('Errore nel caricamento della postazione', error);
-      }
-    });
+  loadUserInfo(): void {
+    const user = localStorage.getItem('utente');
+    if (user) {
+      this.userInfo = JSON.parse(user);
+    }
   }
 
-  private caricaPrimaPostazione(): void {
+  private caricaTuttePostazioni(state: { id: number; prenotazioneDaModificare: PrenotazioneConfermataDto }): void {
     this.postazioneService.getPostazioni().subscribe({
       next: (data: PostazioneDto[]) => {
-        this.postazione = data[0] || null;
+        this.postazioni = data;
+        if (state?.prenotazioneDaModificare) {
+          this.isModifica = true;
+          this.caricaDatiPrenotazione(state.prenotazioneDaModificare);
+        }
+        else if (state?.id) {
+          this.caricaPostazioneById(state.id);
+        } else {
+          this.caricaPrimaPostazione();
+        }
       },
       error: (error: any) => {
         console.error('Errore nel caricamento delle postazioni', error);
       }
     });
+  }
+
+  private caricaDatiPrenotazione(prenotazione: PrenotazioneConfermataDto): void {
+    this.prenotazioneId = prenotazione.id;
+
+    const dataInizio = new Date(prenotazione.dataInizio);
+    const dataFine = new Date(prenotazione.dataFine);
+
+    this.nuovaPrenotazione = {
+      dataInizio: dataInizio,
+      dataFine: dataFine,
+      utenteId: this.userInfo?.id,
+      postazioneId: prenotazione.idPostazione!,
+      costoTotale: prenotazione.costoTotale
+    };
+
+    this.selectedStartHour = dataInizio.getHours();
+    this.selectedEndHour = dataFine.getHours();
+
+    this.postazione = this.postazioni.find(p => p.id === prenotazione.idPostazione) || null;
+  }
+
+  private caricaPostazioneById(id: number): void {
+    this.postazione = this.postazioni.find(p => p.id === id) || null;
+  }
+
+  private caricaPrimaPostazione(): void {
+    this.postazione = this.postazioni[0] || null;
   }
 
   generateTimeOptions(): void {
@@ -166,9 +203,23 @@ export class PrenotazioneComponent implements OnInit {
       dataFine: this.formatLocalDateForAPI(this.nuovaPrenotazione.dataFine)
     };
 
-    this.prenotazioneService.createPrenotazione(formattedPrenotazione).subscribe(
-      {
-        next: res => {
+    if (this.isModifica && this.prenotazioneId) {
+      formattedPrenotazione.prenotazioneId = this.prenotazioneId;
+      formattedPrenotazione.utenteId = this.userInfo?.id;
+      this.prenotazioneService.modificaPrenotazione(formattedPrenotazione).subscribe({
+        next: () => {
+          this.showSuccessDialog("success", "Successo", 'Prenotazione modificata', "Basta presentarsi all'orario prenotato, in caso contrario la prenotazione verrà annullata");
+          this.router.navigate(['/profilo']);
+        },
+        error: (err) => {
+          this.showSuccessDialog("error", "Errore", "", err.error?.error);
+          console.log(err.error);
+        }
+      });
+    } else {
+      formattedPrenotazione.utenteId = this.userInfo?.id;
+      this.prenotazioneService.createPrenotazione(formattedPrenotazione).subscribe({
+        next: () => {
           this.showSuccessDialog("success", "Successo", 'Prenotazione confermata', "Basta presentarsi all'orario prenotato, in caso contrario la prenotazione verrà annullata");
           this.router.navigate(['/home']);
 
@@ -177,8 +228,8 @@ export class PrenotazioneComponent implements OnInit {
           this.showSuccessDialog("error", "Errore", "", err.error?.error);
           console.log(err.error);
         }
-      }
-    )
+      });
+    }
   }
 
   showSuccessDialog(type: string, header: string, title: string, message: string) {

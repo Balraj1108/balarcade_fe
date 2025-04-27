@@ -48,7 +48,6 @@ export class RegistrazioneComponent implements OnInit {
       nome: nome,
       cognome: cognome
     };
-    console.log(registrazioneDto);
     this.registrazioneService.registraUtente(registrazioneDto).subscribe(
       {
         next: res => {

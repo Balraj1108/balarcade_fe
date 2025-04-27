@@ -54,7 +54,6 @@ export class PostazioneComponent implements OnInit {
   }
 
   selezionaPostazione(postazione: PostazioneDto): void {
-    console.log(postazione);
     if (this.isLoggedIn) {
       this.router.navigate(['/prenotazione'], {
         state: {id: postazione.id}

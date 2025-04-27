@@ -1,1 +1,53 @@
-<p>profilo works!</p>
+<div class="container mt-5">
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>Il tuo profilo</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="userInfo" class="row">
+        <div class="col-md-6">
+          <p><strong>Nome:</strong> {{ userInfo.nome }}</p>
+          <p><strong>Cognome:</strong> {{ userInfo.cognome }}</p>
+          <p><strong>Email:</strong> {{ userInfo.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h2>Le tue prenotazioni</h2>
+    </div>
+    <div class="card-body">
+      <p-table [value]="prenotazioni" [loading]="loading" [paginator]="true" [rows]="5">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Data Inizio</th>
+            <th>Data Fine</th>
+            <th>Nome Postazione</th>
+            <th>Costo Totale</th>
+            <th>Azioni</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-prenotazione>
+          <tr>
+            <td>{{ prenotazione.dataInizio | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ prenotazione.dataFine | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ prenotazione.nomePostazione }}</td>
+            <td>{{ prenotazione.costoTotale }}</td>
+            <td>
+              <button *ngIf="checkDataInizio(prenotazione)" class="pi pi-pencil" style="margin-right: 10px; cursor: pointer"
+                      (click)="modificaPrenotazione(prenotazione)"></button>
+              <button *ngIf="checkDataInizio(prenotazione)" class="pi pi-trash" style="cursor: pointer; background-color: red"
+                      (click)="cancellaPrenotazione(prenotazione)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">Nessuna prenotazione trovata</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
