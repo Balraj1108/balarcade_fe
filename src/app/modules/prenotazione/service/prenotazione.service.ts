@@ -25,6 +25,10 @@ export class PrenotazioneService {
     return this.http.get<PrenotazioneConfermataDto[]>(environment.baseHost + '/api/prenotazione?id=' + idUtente);
   }
 
+  getTuttePostazioniPrenotate(): Observable<PrenotazioneConfermataDto[]> {
+    return this.http.get<PrenotazioneConfermataDto[]>(environment.baseHost + '/api/prenotazione/tutte');
+  }
+
   eliminaPrenotazione(idPrenotazione: number): Observable<any> {
     return this.http.delete<any>(environment.baseHost + '/api/prenotazione?idPrenotazione=' + idPrenotazione);
   }

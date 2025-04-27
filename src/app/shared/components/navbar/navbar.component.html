@@ -2,6 +2,7 @@
   <ng-template pTemplate="start">
     <div class="menu-start">
       <button pButton label="Home" [routerLink]="'/home'" class=""></button>
+      <button *ngIf="checkAdmin()" style="margin-left: 5px" pButton label="Prenotazioni" [routerLink]="'/prenotazioni'" class=""></button>
     </div>
   </ng-template>
   <ng-template pTemplate="end">

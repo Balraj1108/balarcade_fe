@@ -1,0 +1,41 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h2>Tutte le prenotazioni</h2>
+    </div>
+    <div class="card-body">
+      <p-table [value]="prenotazioni" [loading]="loading" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nome Cognome</th>
+            <th>Email</th>
+            <th>Data Inizio</th>
+            <th>Data Fine</th>
+            <th>Nome Postazione</th>
+            <th>Costo Totale</th>
+            <th>Azioni</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-prenotazione>
+          <tr>
+            <td>{{ prenotazione.nome }} {{ prenotazione.cognome }}</td>
+            <td>{{ prenotazione.email }}</td>
+            <td>{{ prenotazione.dataInizio | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ prenotazione.dataFine | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ prenotazione.nomePostazione }}</td>
+            <td>{{ prenotazione.costoTotale }}</td>
+            <td>
+              <button class="pi pi-trash" style="cursor: pointer; background-color: red"
+                      (click)="cancellaPrenotazione(prenotazione)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">Nessuna prenotazione trovata</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

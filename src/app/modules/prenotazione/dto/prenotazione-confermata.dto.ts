@@ -5,5 +5,8 @@ export interface PrenotazioneConfermataDto {
   idPostazione?: number;
   tipoPostazione?: string;
   nomePostazione?: string;
+  nome?: string;
+  cognome?: string;
+  email?: string;
   costoTotale?: number;
 }
